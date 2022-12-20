@@ -15,7 +15,7 @@ const taskRouter = require("./routers/task");
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://atom.think-digital.in", "https://atomstg.think-digital.in", "https://atomthinkdigital.netlify.app", "https://td-teamdirectory.netlify.app", "https://atomstg.netlify.app"],
+    origin: ["http://localhost:3000", "https://atom.think-digital.in", "https://atomstg.think-digital.in", "https://atomthinkdigital.netlify.app", "https://td-teamdirectory.netlify.app", "https://atomstg.netlify.app", "https://tdatom.netlify.app"],
   })
 );
 
