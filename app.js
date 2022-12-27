@@ -40,6 +40,7 @@ app.use(
       "https://atom.think-digital.in",
       "https://atomstg.think-digital.in",
       "https://atom-staging.think-digital.in",
+      "https://atom-staging.netlify.app",
       "https://atomthinkdigital.netlify.app",
       "https://td-teamdirectory.netlify.app",
       "https://atomstg.netlify.app",
