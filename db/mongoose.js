@@ -3,22 +3,8 @@ import dotenv from "dotenv";
 import { logErrorToSentry } from "../utils/sentry/index.js";
 dotenv.config();
 
-// const connectionURL = process.env.NODE_ENV !== "development" ? process.env.DB_URL_PROD : process.env.DB_URL_DEV;
 const ENV = process.env.NODE_ENV;
-let connectionURL = "";
-switch (ENV) {
-  case "development":
-    connectionURL = process.env.DB_URL_DEV;
-    break;
-  case "production":
-    connectionURL = process.env.DB_URL_PROD;
-    break;
-  case "staging":
-    connectionURL = process.env.DB_URL_STAGING;
-    break;
-  default:
-    connectionURL = process.env.DB_URL_DEV;
-}
+const connectionURL = ENV === "development" ? process.env.DB_URL_DEV : process.env.DB_URL;
 const connectMongoose = async () => {
   mongoose
     .connect(connectionURL, {

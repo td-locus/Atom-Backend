@@ -11,7 +11,6 @@ import { mongooseObjectId } from "../utils/helpers/functions.js";
 const createTask = async (req, res) => {
   try {
     const task = req.body;
-    console.log(task);
     const assignees = task.assignees.map((assignee) => {
       return {
         assignee: mongooseObjectId(assignee),
