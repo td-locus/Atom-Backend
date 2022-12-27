@@ -86,7 +86,7 @@ app.use((error, req, res, next) => {
 });
 
 if (process.env.NEWRELIC_LICENSE_KEY.trim()) {
-  let newrelic_app_name = "atom";
+  let newrelic_app_name = "atom-" + process.env.NODE_ENV.trim();
   process.env.NEW_RELIC_APP_NAME = newrelic_app_name;
   process.env.NEW_RELIC_LICENSE_KEY = process.env.NEWRELIC_LICENSE_KEY;
   import("newrelic")
