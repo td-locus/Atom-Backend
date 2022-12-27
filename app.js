@@ -39,6 +39,7 @@ app.use(
       "http://localhost:3000",
       "https://atom.think-digital.in",
       "https://atomstg.think-digital.in",
+      "https://atom-staging.think-digital.in",
       "https://atomthinkdigital.netlify.app",
       "https://td-teamdirectory.netlify.app",
       "https://atomstg.netlify.app",
