@@ -1,6 +1,6 @@
-const Audit = require("../models/Audit");
+import Audit from "../models/Audit.js";
 
-exports.createAudit = async (req, res) => {
+const createAudit = async (req, res) => {
   const audit = new Audit(req.body);
   audit.user = req.user._id;
   try {
@@ -11,7 +11,9 @@ exports.createAudit = async (req, res) => {
   }
 };
 
-exports.getAudits = async (req, res) => {
+const getAudits = async (req, res) => {
   const audits = await Audit.find({ user: req.user._id });
   res.status(200).json(audits);
 };
+
+export default { createAudit, getAudits };

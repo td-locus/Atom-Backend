@@ -1,9 +1,9 @@
-const Domain = require("../models/Domain");
+import Domain from "../models/Domain.js";
 
 // @desc create domain
 // @route POST /api/domain
 // @access Private
-exports.addDomain = async (req, res) => {
+const addDomain = async (req, res) => {
   try {
     req.body.lead = [req.user._id];
     const domain = new Domain(req.body);
@@ -17,7 +17,7 @@ exports.addDomain = async (req, res) => {
 // @desc get domains
 // @route GET /api/domains
 // @access Private
-exports.getDomains = async (req, res) => {
+const getDomains = async (req, res) => {
   try {
     const domains = await Domain.find({}).lean().populate("lead", "name username avatar defaultAvatar");
     res.status(201).json(domains);
@@ -25,3 +25,5 @@ exports.getDomains = async (req, res) => {
     res.status(400).json();
   }
 };
+
+export default { addDomain, getDomains };

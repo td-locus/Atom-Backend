@@ -1,8 +1,8 @@
-const express = require("express");
-const auth = require("../middleware/auth");
-const router = new express.Router();
+import express from "express";
+import auth from "../middleware/auth.js";
+import eventController from "../controllers/eventController.js";
 
-const eventController = require("../controllers/eventController");
+const router = new express.Router();
 
 router.post("/api/event", auth, eventController.createEvent);
 
@@ -16,4 +16,4 @@ router.patch("/api/events/edit", auth, eventController.updateEvent);
 
 router.delete("/api/events/delete", auth, eventController.deleteEvent);
 
-module.exports = router;
+export default router;

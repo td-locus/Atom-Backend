@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const auditSchema = new mongoose.Schema({
   timestamp: {
@@ -18,4 +18,5 @@ const auditSchema = new mongoose.Schema({
 });
 
 const Audit = mongoose.model("Audit", auditSchema);
-module.exports = Audit;
+
+export default Audit;

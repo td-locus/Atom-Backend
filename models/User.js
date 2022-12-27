@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import Event from "./Event.js";
+
 const saltRounds = 8;
-const Event = require("./Event");
 
 const userSchema = new mongoose.Schema(
   {
@@ -166,4 +167,5 @@ userSchema.pre("remove", async function (next) {
 });
 
 const User = mongoose.model("User", userSchema);
-module.exports = User;
+
+export default User;
