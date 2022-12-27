@@ -1,26 +1,51 @@
-const express = require("express");
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
 
-const cors = require("cors");
 const app = express();
+dotenv.config();
+
+// database
+import "./db/mongoose.js";
+
+// Sentry
+import Sentry from "@sentry/node";
+global.sentry = Sentry;
+import * as sentry from "./utils/sentry/index.js";
+
+sentry.Init();
 
 // Routes
-const userRouter = require("./routers/user");
-const eventRouter = require("./routers/event");
-const auditRouter = require("./routers/audit");
-const domainRouter = require("./routers/domain");
-const projectRouter = require("./routers/project");
-const goodiesRouter = require("./routers/goodies");
-const taskRouter = require("./routers/task");
+import userRouter from "./routers/user.js";
+import eventRouter from "./routers/event.js";
+import auditRouter from "./routers/audit.js";
+import domainRouter from "./routers/domain.js";
+import projectRouter from "./routers/project.js";
+import goodiesRouter from "./routers/goodies.js";
+import taskRouter from "./routers/task.js";
+
+/*************
+ * Request tracking middleware
+ * ****************/
+app.use((request, response, next) => {
+  console.log(request.method, request.url);
+  next();
+});
 
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://atom.think-digital.in", "https://atomstg.think-digital.in", "https://atomthinkdigital.netlify.app", "https://td-teamdirectory.netlify.app", "https://atomstg.netlify.app", "https://tdatom.netlify.app"],
+    origin: [
+      "http://localhost:3000",
+      "https://atom.think-digital.in",
+      "https://atomstg.think-digital.in",
+      "https://atomthinkdigital.netlify.app",
+      "https://td-teamdirectory.netlify.app",
+      "https://atomstg.netlify.app",
+      "https://tdatom.netlify.app",
+    ],
   })
 );
-
-require("dotenv").config();
-require("./db/mongoose");
 
 app.use(userRouter);
 app.use(eventRouter);
@@ -29,6 +54,22 @@ app.use(domainRouter);
 app.use(projectRouter);
 app.use(goodiesRouter);
 app.use(taskRouter);
+
+/******
+ *
+ * Error handling for sentry
+ * *********/
+if (process.env.NODE_ENV.trim() !== "development") {
+  // The error handler must be before any other error middleware
+  app.use(global.sentry.Handlers.errorHandler());
+  // Optional fallthrough error handler
+  app.use(function onError(err, req, res, next) {
+    // The error id is attached to `res.sentry` to be returned
+    // and optionally displayed to the user for support.
+    res.statusCode = 500;
+    res.end(res.sentry + "\n");
+  });
+}
 
 // Handling 404 Errors
 app.use((req, res, next) => {
@@ -40,11 +81,25 @@ app.use((req, res, next) => {
 // Handling Server Errors
 app.use((error, req, res, next) => {
   console.log(error.stack);
+  sentry.logErrorToSentry(error);
   res.status(error.status || 500).json({ message: error.message || "Internal Server Error!" });
 });
 
-const PORT = process.env.PORT;
+if (process.env.NEWRELIC_LICENSE_KEY.trim()) {
+  let newrelic_app_name = "atom";
+  process.env.NEW_RELIC_APP_NAME = newrelic_app_name;
+  process.env.NEW_RELIC_LICENSE_KEY = process.env.NEWRELIC_LICENSE_KEY;
+  import("newrelic")
+    .then(() => {
+      console.log("Newrelic is running 👍");
+    })
+    .catch((err) => {
+      sentry.logErrorToSentry(err);
+      console.log("Newrelic is not running 👎");
+    });
+}
 
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT} 🚀`);
 });

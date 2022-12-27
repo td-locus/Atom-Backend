@@ -1,11 +1,11 @@
-const express = require("express");
-const auth = require("../middleware/auth");
-const router = new express.Router();
+import express from "express";
+import auth from "../middleware/auth.js";
+import domainController from "../controllers/domainController.js";
 
-const domainController = require("../controllers/domainController");
+const router = new express.Router();
 
 router.post("/api/domain", auth, domainController.addDomain);
 
 router.get("/api/domains", auth, domainController.getDomains);
 
-module.exports = router;
+export default router;

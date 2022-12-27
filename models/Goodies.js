@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const goodiesSchema = new mongoose.Schema({
   timestamp: {
@@ -33,4 +33,5 @@ const goodiesSchema = new mongoose.Schema({
 });
 
 const Goodies = mongoose.model("Goodies", goodiesSchema);
-module.exports = Goodies;
+
+export default Goodies;

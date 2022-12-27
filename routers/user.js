@@ -1,65 +1,66 @@
-const express = require("express");
-const auth = require("../middleware/auth");
+import express from "express";
+import auth from "../middleware/auth.js";
+import userController from "../controllers/userController.js";
+
 const router = new express.Router();
-const userController = require("../controllers/userController");
 
-router.post("/api/signup", userController.signupUser);
+router.post("/api/signup", userController.auth.signupUser);
 
-router.post("/api/login", userController.loginUser);
+router.post("/api/login", userController.auth.loginUser);
 
-router.post("/api/google", userController.googleAuth);
+router.post("/api/google", userController.auth.googleAuth);
 
-router.get("/api/general", auth, userController.getGeneralProfile);
+router.get("/api/general", auth, userController.profile.getGeneralProfile);
 
-router.get("/api/profileCompleted", auth, userController.getProfileCompleted);
+router.get("/api/profileCompleted", auth, userController.profile.getProfileCompleted);
 
-router.post("/api/general", auth, userController.updateGeneralProfile);
+router.post("/api/general", auth, userController.profile.updateGeneralProfile);
 
-router.get("/api/getInterests", auth, userController.getInterests);
+router.get("/api/getInterests", auth, userController.profile.getInterests);
 
-router.post("/api/avatar", auth, userController.updateAvatar);
+router.post("/api/avatar", auth, userController.profile.updateAvatar);
 
-router.delete("/api/avatar", auth, userController.deleteAvatar);
+router.delete("/api/avatar", auth, userController.profile.deleteAvatar);
 
-router.post("/api/social", auth, userController.updateSocialLinks);
+router.post("/api/social", auth, userController.profile.updateSocialLinks);
 
-router.get("/api/social", auth, userController.getSocialLinks);
+router.get("/api/social", auth, userController.profile.getSocialLinks);
 
-router.post("/api/isEmailTaken", userController.isEmailTaken);
+router.post("/api/isEmailTaken", userController.validation.isEmailTaken);
 
-router.post("/api/isUsernameTaken", userController.isUsernameTaken);
+router.post("/api/isUsernameTaken", userController.validation.isUsernameTaken);
 
-router.post("/api/isPasswordMatching", auth, userController.isPasswordMatching);
+router.post("/api/isPasswordMatching", auth, userController.validation.isPasswordMatching);
 
-router.post("/api/changePassword", auth, userController.changePassword);
+router.post("/api/changePassword", auth, userController.auth.changePassword);
 
-router.delete("/api/user", auth, userController.deleteAccount);
+router.delete("/api/user", auth, userController.auth.deleteAccount);
 
-router.post("/api/personal", auth, userController.addPersonalDetails);
+router.post("/api/personal", auth, userController.profile.addPersonalDetails);
 
-router.get("/api/personal", auth, userController.getPersonalDetails);
+router.get("/api/personal", auth, userController.profile.getPersonalDetails);
 
-router.post("/api/isEmailAvailable", auth, userController.isEmailAvailable);
+router.post("/api/isEmailAvailable", auth, userController.validation.isEmailAvailable);
 
-router.post("/api/isUsernameAvailable", auth, userController.isUsernameAvailable);
+router.post("/api/isUsernameAvailable", auth, userController.validation.isUsernameAvailable);
 
-router.post("/api/checkEmail", userController.checkEmail);
+router.post("/api/checkEmail", userController.validation.checkEmail);
 
-router.post("/api/resetPassword", userController.resetPassword);
+router.post("/api/resetPassword", userController.auth.resetPassword);
 
-router.get("/api/role", auth, userController.getRole);
+router.get("/api/role", auth, userController.profile.getRole);
 
-router.get("/api/assignees", auth, userController.getAssignees);
+router.get("/api/assignees", auth, userController.info.getAssignees);
 
-router.get("/api/users/:username", auth, userController.getUserProfile);
+router.get("/api/users/:username", auth, userController.info.getUserProfile);
 
 // Electrons, Protons, Nucleus
-router.get("/api/electrons", auth, userController.getElectrons);
+router.get("/api/electrons", auth, userController.info.getElectrons);
 
-router.get("/api/protons", auth, userController.getProtons);
+router.get("/api/protons", auth, userController.info.getProtons);
 
-router.get("/api/members", auth, userController.getMembers);
+router.get("/api/members", auth, userController.info.getMembers);
 
-router.get("/api/nucleus", auth, userController.getNucleus);
+router.get("/api/nucleus", auth, userController.info.getNucleus);
 
-module.exports = router;
+export default router;
