@@ -1,22 +1,48 @@
 import User from "../../models/User.js";
 import { logErrorToSentry } from "../../utils/sentry/index.js";
 
+// @desc Update Roles of a user when year changes
+// @route PATCH /api/updateRoles
+// @access Private
+
+const updateRoles = async (req, res) => {
+ try {
+  const date = new Date();
+  const year = date.getFullYear();
+  const users = await User.find();
+  users.forEach(async (user) => {
+   const _user = user;
+   _user.roles = {
+    ..._user.roles,
+    [year]: _user.roles[year - 1],
+   };
+   await _user.save();
+  });
+  res.status(200).json();
+ } catch (error) {
+  logErrorToSentry(error, {
+   workflow: "updateRoles",
+  });
+  res.status(400).json();
+ }
+};
+
 // @desc Get electrons
 // @route POST /api/electrons
 // @access Private
 
 const getElectrons = async (req, res) => {
-  try {
-    const date = new Date();
-    const type = `roles.${date.getFullYear()}`;
-    const users = await User.find({ [type]: "registered" }).select("-password");
-    res.status(200).json(users);
-  } catch (err) {
-    logErrorToSentry(err, {
-      workflow: "getElectrons",
-    });
-    res.status(400).json();
-  }
+ try {
+  const date = new Date();
+  const type = `roles.${date.getFullYear()}`;
+  const users = await User.find({ [type]: "registered" }).select("-password");
+  res.status(200).json(users);
+ } catch (err) {
+  logErrorToSentry(err, {
+   workflow: "getElectrons",
+  });
+  res.status(400).json();
+ }
 };
 
 // @desc Get protons
@@ -24,37 +50,37 @@ const getElectrons = async (req, res) => {
 // @access Private
 
 const getProtons = async (req, res) => {
-  try {
-    const date = new Date();
-    const type = `roles.${date.getFullYear()}`;
-    let query = { $or: [{ [type]: "team-lead" }, { [type]: "lead" }, { [type]: "vice-lead" }, { [type]: "member" }] };
-    if (req.query.domain && req.query.domain !== "all") {
-      query = {
-        ...query,
-        "domain.domainPrimary": req.query.domain,
-      };
-    }
-    if (req.query.role && req.query.role !== "all" && req.query.role !== "lead") {
-      query = {
-        ...query,
-        [type]: req.query.role,
-      };
-    }
-    if (req.query.role === "lead") {
-      query = {
-        ...query,
-        $or: [{ [type]: "team-lead" }, { [type]: "lead" }],
-      };
-    }
-    const users = await User.find(query).select("-password").sort({ name: 1 });
-
-    res.status(200).json(users);
-  } catch (err) {
-    logErrorToSentry(err, {
-      workflow: "getProtons",
-    });
-    res.status(400).json();
+ try {
+  const date = new Date();
+  const type = `roles.${date.getFullYear()}`;
+  let query = { $or: [{ [type]: "team-lead" }, { [type]: "lead" }, { [type]: "vice-lead" }, { [type]: "member" }] };
+  if (req.query.domain && req.query.domain !== "all") {
+   query = {
+    ...query,
+    "domain.domainPrimary": req.query.domain,
+   };
   }
+  if (req.query.role && req.query.role !== "all" && req.query.role !== "lead") {
+   query = {
+    ...query,
+    [type]: req.query.role,
+   };
+  }
+  if (req.query.role === "lead") {
+   query = {
+    ...query,
+    $or: [{ [type]: "team-lead" }, { [type]: "lead" }],
+   };
+  }
+  const users = await User.find(query).select("-password").sort({ name: 1 });
+
+  res.status(200).json(users);
+ } catch (err) {
+  logErrorToSentry(err, {
+   workflow: "getProtons",
+  });
+  res.status(400).json();
+ }
 };
 
 // @desc Get all members - Team directory
@@ -62,20 +88,20 @@ const getProtons = async (req, res) => {
 // @access Private
 
 const getMembers = async (req, res) => {
-  try {
-    const date = new Date();
-    const type = `roles.${date.getFullYear()}`;
-    let query = { $or: [{ [type]: "team-lead" }, { [type]: "vice-lead" }, { [type]: "lead" }, { [type]: "member" }, { [type]: "mentor" }] };
+ try {
+  const date = new Date();
+  const type = `roles.${date.getFullYear()}`;
+  let query = { $or: [{ [type]: "team-lead" }, { [type]: "vice-lead" }, { [type]: "lead" }, { [type]: "member" }, { [type]: "mentor" }] };
 
-    const users = await User.find(query).select("-password").sort({ name: 1 });
+  const users = await User.find(query).select("-password").sort({ name: 1 });
 
-    res.status(200).json(users);
-  } catch (err) {
-    logErrorToSentry(err, {
-      workflow: "getMembers",
-    });
-    res.status(400).json();
-  }
+  res.status(200).json(users);
+ } catch (err) {
+  logErrorToSentry(err, {
+   workflow: "getMembers",
+  });
+  res.status(400).json();
+ }
 };
 
 // @desc Get nucleus
@@ -83,20 +109,20 @@ const getMembers = async (req, res) => {
 // @access Private
 
 const getNucleus = async (req, res) => {
-  try {
-    const date = new Date();
-    const type = `roles.${date.getFullYear()}`;
+ try {
+  const date = new Date();
+  const type = `roles.${date.getFullYear()}`;
 
-    const users = await User.find({ [type]: "mentor" })
-      .select("-password")
-      .sort({ name: 1 });
-    res.status(200).json(users);
-  } catch (err) {
-    logErrorToSentry(err, {
-      workflow: "getNucleus",
-    });
-    res.status(400).json();
-  }
+  const users = await User.find({ [type]: "mentor" })
+   .select("-password")
+   .sort({ name: 1 });
+  res.status(200).json(users);
+ } catch (err) {
+  logErrorToSentry(err, {
+   workflow: "getNucleus",
+  });
+  res.status(400).json();
+ }
 };
 
 // @desc get assignees
@@ -104,15 +130,15 @@ const getNucleus = async (req, res) => {
 // @access Private
 
 const getAssignees = async (req, res) => {
-  try {
-    const users = await User.find({ _id: { $ne: req.user._id } }).select("name username _id");
-    res.status(200).json(users);
-  } catch (err) {
-    logErrorToSentry(err, {
-      workflow: "getAssignees",
-    });
-    res.status(400).json();
-  }
+ try {
+  const users = await User.find({ _id: { $ne: req.user._id } }).select("name username _id");
+  res.status(200).json(users);
+ } catch (err) {
+  logErrorToSentry(err, {
+   workflow: "getAssignees",
+  });
+  res.status(400).json();
+ }
 };
 
 // @desc Get profile of a user
@@ -120,15 +146,15 @@ const getAssignees = async (req, res) => {
 // @access Private
 
 const getUserProfile = async (req, res) => {
-  try {
-    const user = await User.find({ username: req.params.username });
-    res.status(200).json(user[0]);
-  } catch (err) {
-    logErrorToSentry(err, {
-      workflow: "getUserProfile",
-    });
-    res.status(400).json(err);
-  }
+ try {
+  const user = await User.find({ username: req.params.username });
+  res.status(200).json(user[0]);
+ } catch (err) {
+  logErrorToSentry(err, {
+   workflow: "getUserProfile",
+  });
+  res.status(400).json(err);
+ }
 };
 
-export { getElectrons, getProtons, getNucleus, getAssignees, getUserProfile, getMembers };
+export { updateRoles, getElectrons, getProtons, getNucleus, getAssignees, getUserProfile, getMembers };

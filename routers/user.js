@@ -63,4 +63,7 @@ router.get("/api/members", auth, userController.info.getMembers);
 
 router.get("/api/nucleus", auth, userController.info.getNucleus);
 
+// Update roles of a user when year changes
+router.patch("/api/updateRoles", userController.info.updateRoles);
+
 export default router;
