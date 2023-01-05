@@ -127,7 +127,6 @@ exports.googleAuth = async (req, res) => {
 // @desc Check email for forgot password & send otp
 // @route POST /api/checkEmail
 // @access Public
-
 exports.checkEmail = async (req, res) => {
   try {
     const user = await User.find({ email: req.body.email });
