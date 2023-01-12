@@ -11,6 +11,7 @@ const domainRouter = require("./routers/domain");
 const projectRouter = require("./routers/project");
 const goodiesRouter = require("./routers/goodies");
 const taskRouter = require("./routers/task");
+const adminRouter = require("./admin/routers");
 
 app.use(express.json());
 app.use(
@@ -29,6 +30,7 @@ app.use(domainRouter);
 app.use(projectRouter);
 app.use(goodiesRouter);
 app.use(taskRouter);
+app.use(adminRouter);
 
 // Handling 404 Errors
 app.use((req, res, next) => {

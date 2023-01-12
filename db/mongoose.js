@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const connectionURL = process.env.NODE_ENV === "development" ? process.env.DB_URL_PROD : process.env.DB_URL_PROD;
+const connectionURL = process.env.NODE_ENV === "development" ? process.env.DB_URL : process.env.DB_URL;
+// const connectionURL = process.env.DB_URL;
 
 const connectMongoose = async () => {
   mongoose

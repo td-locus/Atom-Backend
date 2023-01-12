@@ -150,6 +150,18 @@ userSchema.methods.toJSON = function () {
   return userObject;
 };
 
+userSchema.methods.isAdmin = function () {
+  const user = this;
+  const ALLOWED_ROLES = ['lead', 'team-lead'];
+  let isAllowed = false;
+  ALLOWED_ROLES.forEach((role) => {
+    if (Object.values(user.roles).includes(role)) {
+      isAllowed = true;
+    }
+  })
+  return isAllowed;
+}
+
 userSchema.pre("save", async function (next) {
   const user = this;
 
