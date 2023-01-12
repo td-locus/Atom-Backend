@@ -7,6 +7,12 @@ const User = require("../../models/User");
 const bcrypt = require('bcryptjs');
 const ApiError = require("../../utils/ApiError");
 
+/**
+ * @description Login Admin using email and password
+ * @route POST /api/admin/auth/login
+ * @access Public
+ * @body { email: string, password: string }
+ */
 exports.loginAdmin = async (req, res, next) => {
     try {
         const { email = '', password = '' } = req.body;
@@ -21,7 +27,7 @@ exports.loginAdmin = async (req, res, next) => {
         const role = await admin.checkRole();
         admin = admin.toObject();
         admin.role = role;
-        res.status(200).json({ admin, token });
+        res.status(200).json({ admin, token, message: 'admin/email-password-login-successful' });
     } catch (error) {
         return next(error);
     }
