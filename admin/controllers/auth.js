@@ -17,7 +17,6 @@ exports.loginAdmin = async (req, res, next) => {
     try {
         const { email = '', password = '' } = req.body;
         let admin = await User.findOne({ email });
-        console.log(admin)
         if (!admin) throw new ApiError({ status: 404, message: 'admin/invalid-email' });
         if (!admin.isAdmin()) throw new ApiError({ status: 401, message: 'admin/unauthorized-access' });
         if (!admin?.password) throw new ApiError({ status: 403, message: 'admin/google-login-required' })
@@ -33,9 +32,17 @@ exports.loginAdmin = async (req, res, next) => {
     }
 };
 
-exports.googleLoginAdmin = async (req, res) => {
+exports.googleLoginAdmin = async (req, res, next) => {
     try {
-
+        const { email } = req.body;
+        let admin = await User.findOne({ email });
+        if (!admin) throw new ApiError({ status: 404, message: 'admin/invalid-email' });
+        if (!admin.isAdmin()) throw new ApiError({ status: 401, message: 'admin/unauthorized-access' });
+        const token = await admin.generateAuthToken();
+        const role = await admin.checkRole();
+        admin = admin.toObject();
+        admin.role = role;
+        res.status(200).json({ admin, token, message: 'admin/google-login-successful' });
     } catch (error) {
         return next(error);
     }
