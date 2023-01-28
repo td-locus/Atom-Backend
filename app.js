@@ -1,5 +1,5 @@
 const express = require("express");
-
+const logger = require('morgan');
 const cors = require("cors");
 const app = express();
 
@@ -19,6 +19,7 @@ app.use(
     origin: ["http://localhost:3000", "https://atom.think-digital.in", "https://atomstg.think-digital.in", "https://atomthinkdigital.netlify.app", "https://td-teamdirectory.netlify.app", "https://atomstg.netlify.app", "https://tdatom.netlify.app"],
   })
 );
+app.use(logger(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'))
 
 require("dotenv").config();
 require("./db/mongoose");
