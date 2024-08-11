@@ -126,7 +126,7 @@ export const sendTaskReminderMail = async (to, name, task) => {
   try {
     const { title, description, dueDate, assignor } = task;
     const deadlineDate = new Date(dueDate).toDateString();
-    const deadlineTime = new Date(dueDate).toLocaleTimeString("en-US", {
+    const deadlineTime = new Date(dueDate).toLocaleTimeString("en-IN", {
       hour12: true,
       hour: "numeric",
       minute: "numeric",
