@@ -1,11 +1,11 @@
-const express = require("express");
-const auth = require("../middleware/auth");
-const router = new express.Router();
+import express from "express";
+import auth from "../middleware/auth.js";
+import auditController from "../controllers/auditController.js";
 
-const auditController = require("../controllers/auditController");
+const router = new express.Router();
 
 router.post("/api/audit", auth, auditController.createAudit);
 
 router.get("/api/audit", auth, auditController.getAudits);
 
-module.exports = router;
+export default router;

@@ -1,13 +1,11 @@
-const Project = require("../models/Project");
-const mongoose = require("mongoose");
-
-const mongooseObjectId = (str) => mongoose.Types.ObjectId(str);
+import Project from "../models/Project.js";
+import { mongooseObjectId } from "../utils/helpers/functions.js";
 
 // @desc create a new project
 // @route POST /api/project
 // @access Private
 
-exports.createProject = async (req, res) => {
+const createProject = async (req, res) => {
   const project = new Project({
     name: "Atom Mobile User App",
     domain: "Web",
@@ -27,7 +25,13 @@ exports.createProject = async (req, res) => {
   res.status(201).json(project);
 };
 
-exports.getProject = async (req, res) => {
+// @desc get project
+// @route GET /api/project
+// @access Private
+
+const getProject = async (req, res) => {
   const project = await Project.find({}).populate("owner", "name username").populate("lead", "name username");
   res.status(200).json(project);
 };
+
+export default { createProject, getProject };

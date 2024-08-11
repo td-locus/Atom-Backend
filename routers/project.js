@@ -1,11 +1,11 @@
-const express = require("express");
-const auth = require("../middleware/auth");
-const router = new express.Router();
+import express from "express";
+import auth from "../middleware/auth.js";
+import projectController from "../controllers/projectController.js";
 
-const projectController = require("../controllers/projectController");
+const router = new express.Router();
 
 router.post("/api/project", auth, projectController.createProject);
 
 router.get("/api/project", auth, projectController.getProject);
 
-module.exports = router;
+export default router;

@@ -1,11 +1,11 @@
-const express = require("express");
-const router = express.Router();
-const auth = require("../middleware/auth");
+import express from "express";
+import auth from "../middleware/auth.js";
+import goodiesController from "../controllers/goodiesController.js";
 
-const goodiesController = require("../controllers/goodiesController");
+const router = express.Router();
 
 router.post("/api/confirmOrder", auth, goodiesController.confirmOrder);
 
 router.get("/api/checkOrder", auth, goodiesController.checkOrder);
 
-module.exports = router;
+export default router;

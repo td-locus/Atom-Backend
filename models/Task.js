@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const taskSchema = new mongoose.Schema({
   timestamp: {
@@ -21,6 +21,10 @@ const taskSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
       },
+      completed_at: {
+        type: Date,
+        default: null,
+      },
     },
   ],
   assignor: {
@@ -30,4 +34,5 @@ const taskSchema = new mongoose.Schema({
 });
 
 const Task = mongoose.model("Task", taskSchema);
-module.exports = Task;
+
+export default Task;
