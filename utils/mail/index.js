@@ -32,7 +32,7 @@ function replacePlaceholders(template, data) {
 
 export const sendWelcomeMail = (to, name) => {
   const htmlContent = replacePlaceholders(welcomeTemplate, {
-    name,
+    name: name?.split(" ")?.[0] ?? "User",
   });
 
   let mailDetails = {
@@ -56,7 +56,7 @@ export const sendWelcomeMail = (to, name) => {
 export const sendForgotPasswordMail = (to, name) => {
   const OTP = otpGenerator.generate(6, { lowerCaseAlphabets: false, specialChars: false });
   const htmlContent = replacePlaceholders(forgotPasswordTemplate, {
-    name,
+    name: name?.split(" ")?.[0] ?? "User",
     OTP,
   });
   let mailDetails = {
@@ -132,7 +132,7 @@ export const sendTaskReminderMail = async (to, name, task) => {
       minute: "numeric",
     });
     const htmlContent = replacePlaceholders(taskReminderTemplate, {
-      name,
+      name: name?.split(" ")?.[0] ?? "User",
       assignor,
       deadlineDate,
       deadlineTime,
