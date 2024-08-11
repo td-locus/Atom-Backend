@@ -54,6 +54,7 @@ app.use(domainRouter);
 app.use(projectRouter);
 app.use(goodiesRouter);
 app.use(taskRouter);
+app.use(adminRouter);
 
 app.get("/health", (req, res) => {
   res.status(200).json({ message: "Service is running! 🚀" });
